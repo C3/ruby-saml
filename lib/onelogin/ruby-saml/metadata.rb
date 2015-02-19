@@ -51,7 +51,15 @@ module OneLogin
         # Add KeyDescriptor if messages will be signed
         cert = settings.get_sp_cert()
         if cert
+          # Add signing cert
           kd = sp_sso.add_element "md:KeyDescriptor", { "use" => "signing" }
+          ki = kd.add_element "ds:KeyInfo", {"xmlns:ds" => "http://www.w3.org/2000/09/xmldsig#"}
+          xd = ki.add_element "ds:X509Data"
+          xc = xd.add_element "ds:X509Certificate"
+          xc.text = Base64.encode64(cert.to_der).gsub("\n", '')
+
+          # Add encryption cert
+          kd = sp_sso.add_element "md:KeyDescriptor", { "use" => "encryption" }
           ki = kd.add_element "ds:KeyInfo", {"xmlns:ds" => "http://www.w3.org/2000/09/xmldsig#"}
           xd = ki.add_element "ds:X509Data"
           xc = xd.add_element "ds:X509Certificate"
