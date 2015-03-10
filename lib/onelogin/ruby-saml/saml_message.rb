@@ -3,6 +3,7 @@ require 'zlib'
 require 'base64'
 require "rexml/document"
 require "rexml/xpath"
+require 'pry'
 
 module OneLogin
   module RubySaml

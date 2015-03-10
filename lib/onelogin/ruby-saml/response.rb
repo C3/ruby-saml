@@ -10,7 +10,7 @@ module OneLogin
       ASSERTION = "urn:oasis:names:tc:SAML:2.0:assertion"
       PROTOCOL  = "urn:oasis:names:tc:SAML:2.0:protocol"
       DSIG      = "http://www.w3.org/2000/09/xmldsig#"
-      XENC      = "http://www.w3.org/2001/04/xmlenc#" 
+      XENC      = "http://www.w3.org/2001/04/xmlenc#"
 
       # TODO: This should probably be ctor initialized too... WDYT?
       attr_accessor :settings
@@ -283,7 +283,7 @@ module OneLogin
 
       def retrieve_symmetric_key(cipher_data)
         private_key = OpenSSL::PKey::RSA.new(settings.get_sp_key)
-        encrypted_aes_key_element = REXML::XPath.first(cipher_data, "./ds:KeyInfo/xenc:EncryptedKey/xenc:CipherData/xenc:CipherValue", { "ds" => DSIG, "xenc" => XENC })
+        encrypted_aes_key_element = REXML::XPath.first(cipher_data, "../xenc:EncryptedKey/xenc:CipherData/xenc:CipherValue", { "ds" => DSIG, "xenc" => XENC })
         encrypted_aes_key = Base64.decode64(encrypted_aes_key_element.text)
         private_key.private_decrypt(encrypted_aes_key, OpenSSL::PKey::RSA::PKCS1_OAEP_PADDING)
       end
